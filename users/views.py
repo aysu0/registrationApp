@@ -7,8 +7,9 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
+            user = form.save()
+            course = form.cleaned_data.get('course')
+            user.groups.add(course)
             messages.success(request, f'Your account has been created! Now you can login!')
             return redirect('login')
         else:

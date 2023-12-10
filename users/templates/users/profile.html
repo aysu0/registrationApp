@@ -4,9 +4,12 @@
 
 <div class="content-section">
     <div class="media">
-        <p><img class="rounded-circle account-img" src="{{user.profile.image.url}}"></p>
+        <p><img class="rounded-circle account-img" src="{{user.profile.image.url}}" height="200" width="200"></p>
             <div class="media-body">
-                <h2 class="account-heading">{{user.profile}}</h2> <p class="text-secondary">{{user.username}}</p> <p class="text-secondary">{{user.email}}</p>
+                <h2 class="account-heading">{{user.profile}}</h2> 
+                <p class="text-secondary">{{user.username}}</p>
+                <p class="text-secondary">{{user.email}} 
+                <p class="text-secondary">{{user.groups.first}} </p>
             </div>
     </div>
     <form method="POST" enctype="multipart/form-data">
@@ -24,4 +27,7 @@
             </div>
         </form>
 </div>
+
+
+
 {% endblock content %}

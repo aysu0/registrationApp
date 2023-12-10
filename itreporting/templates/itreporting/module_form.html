@@ -5,12 +5,11 @@
 
 <section class="py-5">
     <div class="container px-5">
-        <!-- Contact form-->
         <div class="bg-light rounded-3 py-5 px-4 px-md-5 mb-5">
             <div class="text-center mb-5">
                 <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-envelope"></i></div>
-                <h1 class="fw-bolder">Student Module Registration </h1>
-                <p class="lead fw-normal text-muted mb-0">Login Here!</p>
+                <h1 class="fw-bolder">Create a Module</h1>
+                <p class="lead fw-normal text-muted mb-0">!</p>
             </div>
             <div class="row gx-5 justify-content-center">
                 <div class="col-lg-8 col-xl-6">
@@ -20,74 +19,22 @@
                         {% csrf_token %}
                         
                     <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                        <!-- Name input-->
                         <div class="form-floating mb-3">
                             {{ form | crispy }}
                         </div>
-                       
-                        <!-- Submit success message-->
-                        <!---->
-                        <!-- This is what your users will see when the form-->
-                        <!-- has successfully submitted-->
                         <div class="d-none" id="submitSuccessMessage">
                             <div class="text-center mb-3">
                                 <br />
                                 <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
                             </div>
                         </div>
-                        <div class="border-top pt-3">
-                            <small class="text-muted">Need to create an account?<a class="ml-2" href="{% url 'register' %}">Register</a></small>
-                        </div>
-                        <!-- Submit error message-->
-                        <!---->
-                        <!-- This is what your users will see when there is-->
-                        <!-- an error submitting the form-->
-                        <!-- Submit Button-->
-                        <div class="d-grid"><button class="btn btn-outline-info" type="submit">Login</button>
+                        <div class="d-grid"><button class="btn btn-outline-info" type="submit">Create</button>
 
                     </form>
                 </div>
             </div>
         </div>
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
