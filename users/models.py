@@ -9,6 +9,5 @@ class Profile(models.Model):
     address = models.CharField(max_length=50, blank = True)
     city_town = models.CharField(max_length=255, blank=True)
     country = models.CharField(max_length=255, blank=True)
-    #course = models.Choices()
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'

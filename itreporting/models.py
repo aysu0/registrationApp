@@ -2,11 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User, Group, Permission
 from django.urls import reverse 
-from django.contrib.contenttypes.models import ContentType
 
 
-
-                                                                                                   
 
 
 class Module(models.Model):
@@ -27,37 +24,16 @@ class Module(models.Model):
                                                             ('Architecture', 'Architecture')])
     description = models.TextField()
     availability = models.CharField(max_length = 100, choices = [('Open', 'Open'), ('Closed', 'Closed')])
-
-
-    def __str__(self):
-        return f'{self.name}'
-    def get_absolute_url(self):
-        return reverse('itreprting:module-form', kwargs = {'pk' : self.pk})
-    
-    
-class Course(models.Model):
-    name = models.CharField(max_length = 50)       
-    modules = models.ManyToManyField(Module)
-
+    courses = models.ManyToManyField(Group)
 
     def __str__(self):
         return f'{self.name}'
     def get_absolute_url(self):
-        return reverse('itreprting:course-form', kwargs = {'pk' : self.pk})
+        return reverse('itreporting:module-detail', kwargs = {'pk' : self.pk})
+    
+    
+class Registration(models.Model):
+    student = models.OneToOneField(User, related_name = 'registrations', on_delete = models.CASCADE)
+    module = models.OneToOneField(Module, related_name = 'registrations', on_delete = models.CASCADE)
+    date_of_registration = models.DateField(default = timezone.now)
 
-class CourseGroup(Group):
-    description = models.TextField(blank=True)
-
-
-# content_type = ContentType.objects.get_for_model(MyModel)
-# permission = Permission.objects.create(
-#     codename='custom_permission',
-#     name='Can access custom feature',
-#     content_type=content_type
-# )
-
-# group = Group.objects.create(name='My Group')
-# group.permissions.add(permission)
-
-# user = User.objects.get(username='john')
-# user.groups.add(group)

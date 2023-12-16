@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from django.contrib.auth.views import PasswordResetView
+
 
 def register(request): 
     if request.method == 'POST':
@@ -36,3 +38,16 @@ def profile(request):
 
     context = {'u_form': u_form, 'p_form': p_form, 'title': 'Student Profile'}
     return render(request, 'users/profile.html', context)
+
+
+
+# class CustomPasswordResetView(PasswordResetView):
+#     template_name = 'password_reset_form.html'  # Custom template for the password reset form
+#     success_url = '/custom_reset_done/'  # Redirect URL after a successful password reset request
+#     email_template_name = 'custom_password_reset_email.html'  # Custom email template
+
+#     # You can override other methods or add custom logic as needed
+#     def form_valid(self, form):
+#         # Add your custom logic here
+#         # For example, you can log something or perform additional actions
+#         return super().form_valid(form)
