@@ -33,7 +33,7 @@ class Module(models.Model):
     
     
 class Registration(models.Model):
-    student = models.OneToOneField(User, related_name = 'registrations', on_delete = models.CASCADE)
-    module = models.OneToOneField(Module, related_name = 'registrations', on_delete = models.CASCADE)
+    student = models.ForeignKey(User, related_name = 'registrations', on_delete = models.CASCADE)
+    module = models.ForeignKey(Module, related_name = 'registrations', on_delete = models.CASCADE)
     date_of_registration = models.DateField(default = timezone.now)
 

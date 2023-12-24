@@ -3,7 +3,22 @@
 {% block content %}
 
 <body> 
-    <h1>Module Details</h1>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1 class="fw-bolder mb-0"> Module Details </h1>
+            </div>
+        </div>
+    </div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
         <section class="py-5" id="features">
             <div class="container px-5 my-5">
                 <div class="row gx-5">
@@ -14,12 +29,19 @@
                                 <h2 class="article-title"> {{object.name}}</h2>
                                 <p class="mb-0">{{ module.credit }} credits</p>
                                 <p class="article-content">{{ module.description }}</p>
+
+                                <form method="post" action="{% url 'itreporting:register_module' module.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary">Register for Module</button>
+                                </form>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <h3> Registered Students</h3>
         {% for registration in registrations %}                
         <section class="py-5" id="features">
             <div class="container px-5 my-5">
@@ -27,7 +49,7 @@
                     <div class="col-lg-8">
                         <div class="row gx-5 row-cols-1 row-cols-md-2">
                             <div class="col mb-5 h-100">
-                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
+                                <p><img class="rounded-circle account-img" src="{{user.profile.image.url}}" height="100" width="100"></p>
                                 <h2 class="h5"><a class="article-title" href="#">{{ registration.student }}</a></h2>
                             </div>
                         </div>

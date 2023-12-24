@@ -9,5 +9,5 @@ urlpatterns = [
     path('contact/', ContactFormView.as_view(), name = 'contact'),
     path('modulelist/<int:fk>', PostListView.as_view(), name='modules'),
     path('module/<int:pk>', PostDetailView.as_view(), name = 'module-detail'), 
-    #path('course', views.course, name='coursepage'),
+    path('register_module/<int:module_id>/', views.register_module, name='register_module'),
     ]

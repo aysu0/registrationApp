@@ -4,7 +4,8 @@
 
 <body> 
     <div class="col-lg-4 mb-5 mb-lg-0"><h2 class="fw-bolder mb-0">List of Courses</h2></div>
-    {% for course in course %}                
+    {% for course in course %}             
+    <h2 class="h5"><a class="article-title" href="{% url 'itreporting:modules' course.id %}">{{ course }}</a></h2>   
         <section class="py-5" id="features">
             <div class="container px-5 my-5">
                 <div class="row gx-5">

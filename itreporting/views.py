@@ -1,13 +1,14 @@
 from typing import Any
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.views.generic import CreateView, ListView, FormView, DetailView
 from .models import Module, Registration
 from .forms import ContactForm
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django. contrib import messages
-
+from users.models import Profile
+from users.forms import UserRegisterForm
 
 def home(request):
     daily_course = {'course': Group.objects.all(), 'title' : 'Course List'}
@@ -30,6 +31,7 @@ class PostListView(ListView):
     template_name = 'itreporting/modulelist.html'
     content_object_name = 'models'
     ordering = ['name']
+    paginate_by = 3
 
     def get_context_data(self, **kwargs: Any):
         context = super().get_context_data(**kwargs)
@@ -77,13 +79,33 @@ class ContactFormView(FormView):
         return self.request.path
     
 
-# def register_modules(request):
-#     user_courses = request.user.groups.all()
-#     available_modules = Module.objects.filter(courses__in=user_courses)
-    
-#     context = {
-#         'user_courses': user_courses,
-#         'available_modules': available_modules,
-#     }
-    
-#     return render(request, 'register_modules.html', context)
+@login_required
+def register_module(request, module_id):
+    module = get_object_or_404(Module, id=module_id)
+    user_groups = request.user.groups.all()
+
+    # Check if user is already registered for the module
+    existing_registration = Registration.objects.filter(student=request.user, module=module).exists()
+
+    if existing_registration:
+        # If user is already registered, show message and redirect
+        messages.info(request, 'You are already registered for this module.')
+        return redirect('itreporting:module-detail', pk=module_id)
+
+    # Check if user belongs to any of the groups corresponding to the module's courses
+    module_courses = module.courses.all()
+    if not any(group in user_groups for group in module_courses):
+        # If user doesn't belong to the required group(s), show message and redirect
+        messages.error(request, 'You cannot register for modules outside your course.')
+        return redirect('itreporting:module-detail', pk=module_id)
+
+    if request.method == 'POST':
+        # Create new Registration object
+        registration = Registration(student=request.user, module=module)
+        registration.save()
+
+        # Add success message
+        messages.success(request, 'You have registered to this module successfully!')
+
+    # Redirect to 'modules' URL pattern with pk=module_id
+    return redirect('itreporting:module-detail', pk=module_id)
