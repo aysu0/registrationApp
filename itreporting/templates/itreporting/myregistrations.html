@@ -1,0 +1,41 @@
+{% extends "itreporting/base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h3 class="mb-4">My Registrations</h3>
+    <div class="table-responsive">
+        {% if user_registrations %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>Registration Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registration in user_registrations %}
+                    <tr>
+                        <td>{{ registration.module.name }}</td>
+                        <td>{{ registration.date_of_registration|date:"F d, Y" }}</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Actions">
+                                <a href="{% url 'itreporting:module-detail' pk=registration.module.id %}" class="btn btn-info btn-sm">View Details</a>
+                                <form method="post" action="{% url 'itreporting:unregister-module' module_id=registration.module.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Unregister</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                
+                </tbody>
+            </table>
+        {% else %}
+            <p>No registrations yet. Click <a href="{% url 'itreporting:modules' fk=user.groups.first.id %}">here</a> to register to modules on your course!</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}

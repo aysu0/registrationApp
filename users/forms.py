@@ -18,7 +18,7 @@ class UserUpdateForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'email', ]
 
 class ProfileUpdateForm(forms.ModelForm): 
-    date = forms.DateField(label = 'Date of Birth')
+    date = forms.DateField(label = 'Date of Birth', widget=forms.DateInput(attrs={'placeholder': 'YYYY-MM-DD'}))
     address = forms.CharField(label = 'Address')
     city_town = forms.CharField(label = 'City/Town')
     country = forms.CharField(label = 'Country')

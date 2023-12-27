@@ -26,6 +26,7 @@ def modulelist(request):
     daily_module = {'modules': Module.objects.filter(id = course.id), 'title': 'Modules Registered'}
     return render(request, 'itreporting/modulelist.html', daily_module)
 
+
 class PostListView(ListView):  
     model = Module
     template_name = 'itreporting/modulelist.html'
@@ -109,3 +110,34 @@ def register_module(request, module_id):
 
     # Redirect to 'modules' URL pattern with pk=module_id
     return redirect('itreporting:module-detail', pk=module_id)
+
+@login_required
+def unregister_module(request, module_id):
+    module = get_object_or_404(Module, id=module_id)
+    user = request.user
+
+    # Check if the user is registered for the module
+    registration = Registration.objects.filter(student=user, module=module).first()
+
+    if not registration:
+        # If the user is not registered, show a message and redirect
+        messages.info(request, 'You are not registered for this module.')
+        return redirect('itreporting:module-detail', pk=module_id)
+
+    if request.method == 'POST':
+        # Delete the registration object
+        registration.delete()
+
+        # Add a success message
+        messages.success(request, 'You have unregistered from this module.')
+
+        # Redirect to the 'module-detail' URL pattern or any other appropriate URL
+        return redirect('itreporting:module-detail', pk=module_id)
+
+    # Redirect to the 'module-detail' URL pattern if the request method is not POST
+    return redirect('itreporting:module-detail', pk=module_id)
+
+def my_registrations(request):
+    user_registrations = Registration.objects.filter(student=request.user)
+    context = {'user_registrations': user_registrations}
+    return render(request, 'itreporting/myregistrations.html', context)
