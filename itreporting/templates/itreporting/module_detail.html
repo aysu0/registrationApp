@@ -16,8 +16,10 @@
             <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
     </ul>
-{% endif %}
-
+    {% endif %}
+    {% if module_closed %}
+        <p>This module is currently closed for registration.</p>        
+    {% else %}
 
         <section class="py-5" id="features">
             <div class="container px-5 my-5">
@@ -26,6 +28,7 @@
                         <div class="row gx-5 row-cols-1 row-cols-md-2">
                             <div class="col mb-5 h-100">
                                 <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
+
                                 <h2 class="article-title"> {{object.name}}</h2>
                                 <p class="mb-0">{{ module.credit }} credits</p>
                                 <p class="article-content">{{ module.description }}</p>
@@ -44,28 +47,27 @@
             </div>
         </section>
         {% if user.is_authenticated %}
-        <h3> Registered Students</h3>
-        {% for registration in registrations %}                
-        <section class="py-5" id="features">
-            <div class="container px-5 my-5">
-                <div class="row gx-5">
-                    <div class="col-lg-8">
-                        <div class="row gx-5 row-cols-1 row-cols-md-2">
-                            <div class="col mb-5 h-100">
-                                <p><img class="rounded-circle account-img" src="{{user.profile.image.url}}" height="100" width="100"></p>
-                                <h2 class="h5"><a class="article-title" href="#">{{ registration.student }}</a></h2>
-                                    <form method="post" action="{% url 'itreporting:unregister-module' module.id %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-primary">Unregister</button>
-                                    </form>
-                            </div>
-                        </div>
+        <h3>Registered Students</h3>
+        <div class="container">
+            <div class="col-lg-8">
+                {% for registration in registrations %}
+                    <div class="d-inline-block mr-3 mb-3 align-top" style="height: 200px; border: 1px solid #ccc; padding: 10px;">
+                        <img class="rounded-circle account-img" src="{{user.profile.image.url}}" height="100" width="100">
+                        <h2 class="h5"><a class="article-title" href="#">{{ registration.student }}</a></h2>
+                        {% if request.user == registration.student %}
+                            <form method="post" action="{% url 'itreporting:unregister-module' module.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary mt-2">Unregister</button>
+                            </form>
+                        {% endif %}
                     </div>
-                </div>
+                {% endfor %}
             </div>
-        </section>
-        {% endfor %}
-        {% endif %}
+        </div>
+    {% endif %}    
+{% endif %}
+    
+    
 </body>
 
 {% endblock content %}

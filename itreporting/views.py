@@ -51,12 +51,17 @@ class PostCreateView(CreateView):
     
 class PostDetailView(DetailView):
     model = Module
+    template_name = 'itreporting/module_detail.html'
+    context_object_name = 'module'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        registrations = Registration.objects.filter(module = self.object)
+        registrations = Registration.objects.filter(module=self.object)
         context.update({'title': 'Contact Us', 'registrations': registrations})
-        
+
+        if self.object.availability == 'Closed':
+            context['module_closed'] = True
+
         return context
 
 class ContactFormView(FormView):

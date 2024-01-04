@@ -5,55 +5,49 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-8 text-center">
-            <h1 class="fw-bolder mb-0"> {{ course }} - Modules</h1>
+            <h1 class="fw-bolder mb-4">{{ course }} - Modules</h1>
         </div>
     </div>
 </div>
 
-
-
-
-<body> 
-    {% for module in modules %} 
-
-        <section class="py-5" id="features">
-            <div class="container px-5 my-5">
-                <div class="row gx-5">
-                    <div class="col-lg-8">
-                        <div class="row gx-5 row-cols-1 row-cols-md-2">
-                            <div class="col h-100">
-                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                                <h2 class="h5"><a class="article-title" href="{% url 'itreporting:module-detail' module.id %}">{{ module }}</a></h2>
-                                <p class="mb-0">Credit: {{ module.credit }}</p>
-                                <p class="article-content">Category: {{ module.category }}</p>
-                            </div>
-                        </div>
+<div class="container">
+    <div class="row">
+        {% for module in modules %}
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
+                        <h2 class="h5 card-title"><a class="text-decoration-none text-dark" href="{% url 'itreporting:module-detail' module.id %}">{{ module.name }}</a></h2>
+                        <p class="card-text">Credit: {{ module.credit }}</p>
+                        <p class="card-text">Category: {{ module.category }}</p>
+                        <a href="{% url 'itreporting:module-detail' module.id %}" class="btn btn-primary">Details</a>
                     </div>
                 </div>
             </div>
-        </section>
-    {% endfor %}
+        {% endfor %}
+    </div>
 
     {% if is_paginated %}
-        {% if page_obj.has_previous %}
-            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{page_obj.previous_page_number}}">Previous</a>
-        {% endif %}
-        {% for num in page_obj.paginator.page_range %} {% if page_obj.number == num %}
-            <a class="btn btn-info mb-4" href="?page={{num}}">{{num}}</a>
-        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-            <a class="btn btn-outline-info mb-4" href="?page={{num}}">{{num}}</a>
-        {% endif %}
-        {% endfor %}
-        {% if page_obj.has_next %}
-            <a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{page_obj.paginator.num_pages}}">Last</a>
-        {% endif %}
-        {% endif %}
-
-
-
-
-</body>
+        <div class="pagination justify-content-center mt-4">
+            {% if page_obj.has_previous %}
+                <a class="btn btn-outline-info me-2" href="?page=1">First</a>
+                <a class="btn btn-outline-info me-2" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a class="btn btn-info me-2" href="?page={{ num }}">{{ num }}</a>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a class="btn btn-outline-info me-2" href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+                <a class="btn btn-outline-info me-2" href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a class="btn btn-outline-info" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
 
 {% endblock content %}
