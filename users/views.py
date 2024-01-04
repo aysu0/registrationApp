@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from django.contrib.auth.views import PasswordResetView
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CustomPasswordResetForm
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView
+from django.urls import reverse_lazy
 
 
 def register(request): 
@@ -41,13 +42,19 @@ def profile(request):
 
 
 
-# class CustomPasswordResetView(PasswordResetView):
-#     template_name = 'password_reset_form.html'  # Custom template for the password reset form
-#     success_url = '/custom_reset_done/'  # Redirect URL after a successful password reset request
-#     email_template_name = 'custom_password_reset_email.html'  # Custom email template
+class CustomPasswordResetView(PasswordResetView):   
+    form_class = CustomPasswordResetForm
+    template_name = 'users/password_reset_form.html'  
+    success_url = reverse_lazy('itreporting:password_reset_done')  
+    email_template_name = 'users/password_reset_email.html'
 
-#     # You can override other methods or add custom logic as needed
-#     def form_valid(self, form):
-#         # Add your custom logic here
-#         # For example, you can log something or perform additional actions
-#         return super().form_valid(form)
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'users/password_reset_done.html'
+
+
+def custom_password_reset_complete(request):
+    return render(request, 'users/password_reset_complete.html')
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'users/password_reset_confirm.html'
+    success_url = reverse_lazy('itreporting:password_reset_complete')

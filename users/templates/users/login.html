@@ -29,8 +29,10 @@
                             </div>
                         </div>
                         <div class="border-top pt-3">
-                            <small class="text-muted">Need to create an account?<a class="ml-2" href="{% url 'register' %}">Register</a></small>
+                            <p class="text-muted" style="font-size: 16px;">Need to create an account? <a class="ml-2" href="{% url 'register' %}">Register</a></p>
+                            <p class="text-muted" style="font-size: 16px;">Forgot your password? <a class="ml-2" href="{% url 'itreporting:password_reset' %}">Reset Here</a></p>
                         </div>
+                        
 
                         <div class="d-grid"><button class="btn btn-outline-info" type="submit">Login</button>
 

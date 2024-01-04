@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django. contrib import messages
 from users.models import Profile
 from users.forms import UserRegisterForm
+from users.views import custom_password_reset_complete
 
 def home(request):
     daily_course = {'course': Group.objects.all(), 'title' : 'Course List'}
