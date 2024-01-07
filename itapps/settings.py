@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$l$!s588=i%@t&lu=f30eb#9o=9rjaok4-*!xft1fg#77gqu3x'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'crispy_forms',
     'crispy_bootstrap4',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -79,8 +80,12 @@ WSGI_APPLICATION = 'itapps.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ['AZURE_DB_NAME'],
+        'PORT' : os.environ['AZURE_DB_PORT'],
+        'HOST': os.environ['AZURE_DB_HOST'],
+        'USER' : os.environ['AZURE_DB_USER'],
+        'PASSWORD' : os.environ['AZURE_DB_PASSWORD'],
     }
 }
 
@@ -121,9 +126,36 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = '/media/'
+#STATIC_URL = '/static/'
+#MEDIA_ROOT = BASE_DIR / 'media'
+#MEDIA_URL = '/media/'
+
+
+DEFAULT_FILE_STORAGE = 'itapps.storages.AzureMediaStorage'
+STATICFILES_STORAGE = 'itapps.storages.AzureStaticStorage'
+
+STATIC_URL = 'https://c1008080dcbs.blob.core.windows.net/static/'
+MEDIA_URL = 'https://c1008080dcbs.blob.core.windows.net/media/'
+
+
+ 
+    # "default": {
+    #     "BACKEND": "storages.backends.azure_storage.AzureStorage",
+    #     "OPTIONS": {
+    #         "connection_string" : os.environ['AZURE_SA_CONN'],
+    #         "azure_container" : "media"     
+    #     },
+    # },
+    # "staticfiles": {
+    #     "BACKEND": "storages.backends.azure_storage.AzureStorage",
+    #     "OPTIONS": {
+    #         "connection_string" : os.environ['AZURE_SA_CONN'],
+    #         "azure_container" : "static"     
+    #     },
+    # },
+
+# STATIC_URL = 'https://c1008080dcbs.blob.core.windows.net/static/'
+# MEDIA_URL = 'https://c1008080dcbs.blob.core.windows.net/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
